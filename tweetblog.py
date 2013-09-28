@@ -56,10 +56,7 @@ def show_entries():
             #画像アドレス取得
             image = tweets[0]['user']['profile_image_url_https']
 
-            json.dump(resp.data, open('output.json', 'w'))
-            
-            #これできない。。。
-            #entries = [v for k,v in [i for i in tweets].iteritems() if k == 'text']
+            json.dump(resp.data, open('output.json', 'w'), sort_keys=True, indent=4, )
             
             tweetdate = ''
             tweetdatearray = []
@@ -71,12 +68,33 @@ def show_entries():
                         tweetdatearray.append(tweetdate)
                         if not entries.has_key(tweetdate):
                             entries[tweetdate] = []
+            
             num = 0                
             for i in tweets:
+                
+                text = ''
+                media_url = ''
+                geo_lat = '' #緯度
+                geo_lng = '' #経度
                 for k, v in i.iteritems():
+                    
                     if k == 'text':
-                        entries[tweetdatearray[num]].append(v)
+                        text = v
+                    elif k == 'entities':
+                        if v.get("media") is not None:
+                            for mv in v.get("media"):
+                                if mv.get("type") == "photo":
+                                    media_url = mv.get("media_url")
+                    elif k == "coordinates":
+                        if v is not None:
+                            geo_lat = v.get("coordinates")[1]
+                            geo_lng = v.get("coordinates")[0]
+                            print geo_lng
+                            print geo_lat
+                entries[tweetdatearray[num]].append(dict(content = text, image = media_url, lat = geo_lat, lng = geo_lng))
+                print entries
                 num += 1
+            
             #タプルに変換してsort
             entries = [(k, entries[k]) for k in sorted(entries, reverse = True)]
         else:

@@ -6,10 +6,17 @@
   {% if session.logged_in %}
    <hr>
    <div>
-   {{k[0]|safe}}
-     {% for value in k[1]%}
+   {{k[0]}}
+     {% for tweet in k[1]%}
        <div>
-         {{value|safe}}
+           {{tweet.content}}
+           {{tweet.lat}}
+         {% if tweet.image != "" %}
+         <img src="{{tweet.image}}" />
+         {% endif %}
+         {% if tweet.lat != "" %}
+         <a href="https://maps.google.com/maps?q={{tweet.lat}},{{tweet.lng}}">地図情報</a>
+         {% endif %}
          <br>
        </div>
      {% endfor %}
