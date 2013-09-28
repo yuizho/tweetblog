@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% block body %}
+  <img src = "{{image}}" >
+  <ul class=entries>
+  {% for k in entries %}
+  {% if session.logged_in %}
+   <hr>
+   <div>
+   {{k[0]|safe}}
+     {% for value in k[1]%}
+       <div>
+         {{value|safe}}
+         <br>
+       </div>
+     {% endfor %}
+   </div>
+  {% else %}
+    <li><em>Unbelievable.  No entries here so far</em>
+  {% endif %}
+  {% endfor %}
+  </ul>
+{% endblock %}
