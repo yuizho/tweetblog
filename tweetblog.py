@@ -20,13 +20,18 @@ app = Flask(__name__)
 app.config.from_object(__name__)
 
 oauth = OAuth()
+
+consumer_args = open('consumer.csv').readlines()[0].split(',')
+consumer_key_str = consumer_args[0]
+consumer_secret_str = consumer_args[1]
+
 twitter = oauth.remote_app('twitter',
                            base_url='https://api.twitter.com/1.1/',
                            request_token_url='http://api.twitter.com/oauth/request_token',
                            access_token_url='http://api.twitter.com/oauth/access_token',
                            authorize_url='http://api.twitter.com/oauth/authorize',
-                           consumer_key='ObeHSrrz2AQ98SIeWcUnNw',
-                           consumer_secret='HZeyY3GS24ognW8syaCbwaVgwc1hGlnt4EQRzQuUE1w'
+                           consumer_key=consumer_key_str,
+                           consumer_secret=consumer_secret_str
 )
 
 @twitter.tokengetter
